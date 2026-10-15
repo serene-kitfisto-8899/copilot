@@ -1,0 +1,51 @@
+# Keeps the copilot_ctx PostgreSQL mirror of ~/.copilot current while the
+# Copilot CLI writes (PLAN §6.2): catches up on start, then follows
+# events.jsonl and session-store.db.
+#
+# This is a USER unit; nothing here needs root.
+#   install -Dm644 systemd/ctx-ingest.service ~/.config/systemd/user/ctx-ingest.service
+#   systemctl --user daemon-reload && systemctl --user enable --now ctx-ingest
+#   journalctl --user -u ctx-ingest -f              # follow the log
+#   ctx-ingest verify                               # safe while this runs
+#
+# Linger is off on this host (PLAN §8), so the unit runs only while a login
+# session exists. That is harmless: the CLI cannot write while nobody is
+# logged in, and the first pass after the next login reads from the saved
+# offsets. `loginctl enable-linger` would keep it running through logouts.
+#
+# Settings come from the environment, in this order: CTX_DATABASE_URL,
+# DATABASE_URL, then the local socket as the login user (the unit sets none).
+# To override, add `Environment=CTX_DATABASE_URL=...` in a drop-in
+# (`systemctl --user edit ctx-ingest`), not in this file.
+
+[Unit]
+Description=Copilot CLI context ingester (events.jsonl and session-store.db into PostgreSQL)
+Documentation=file://%h/copilot/PLAN.md
+
+[Service]
+Type=simple
+ExecStart=%h/.cargo/bin/ctx-ingest tail
+
+# The very first pass reads the whole history (about 660 MB) and builds on this
+# host use every core. `Nice` plus the idle I/O class keeps that from slowing
+# the interactive session; the price is only a slightly later sync.
+# (SCHED_IDLE would starve the tail for the whole of a long compile.)
+Nice=10
+IOSchedulingClass=idle
+
+# `tail` exits 1 when PostgreSQL is not reachable yet at login (or goes away
+# mid-run) and 3 when another ingest holds the advisory lock (a manual
+# `once --force`, say). Retrying is right for both: the work is idempotent and
+# the lock clears itself.
+Restart=on-failure
+RestartSec=15
+
+# SIGTERM is the clean stop: a batch in progress commits its transaction
+# first, so every stored offset stays consistent with the rows behind it.
+KillSignal=SIGTERM
+TimeoutStopSec=60
+
+NoNewPrivileges=yes
+
+[Install]
+WantedBy=default.target

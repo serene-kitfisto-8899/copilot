@@ -1,0 +1,53 @@
+[workspace]
+resolver = "3"
+members = ["crates/*"]
+
+[workspace.package]
+version = "0.1.0"
+edition = "2024"
+rust-version = "1.94"
+publish = false
+
+[workspace.dependencies]
+anyhow = "1"
+chrono = { version = "0.4", default-features = false, features = ["clock", "std", "serde"] }
+clap = { version = "4", features = ["derive"] }
+# Already in the tree through sqlx; used for `try_next` on row streams.
+futures-util = { version = "0.3", default-features = false, features = ["std"] }
+# Glob matching for the permission hook's trusted roots and deny-list.
+globset = "0.4"
+notify = "8"
+regex = "1"
+# Must stay <= 0.39: rusqlite 0.40 needs libsqlite3-sys 0.38, while sqlx 0.9's
+# optional sqlx-sqlite (which Cargo still resolves into the lockfile) accepts
+# only <0.38, and two libsqlite3-sys versions cannot coexist (links = "sqlite3").
+rusqlite = { version = "0.39", features = ["bundled"] }
+serde = { version = "1", features = ["derive"] }
+serde_json = "1"
+serde_yaml_ng = "0.10"
+sha2 = "0.11"
+tempfile = "3"
+tokio = { version = "1", features = ["macros", "rt-multi-thread", "signal", "sync", "time", "fs"] }
+toml = "1"
+# The bash grammar the permission hook parses commands with (PLAN D8).
+tree-sitter = "0.27"
+tree-sitter-bash = "0.25"
+tracing = "0.1"
+tracing-subscriber = { version = "0.3", features = ["env-filter", "fmt"] }
+
+# Postgres only: the SQLite session store is read with rusqlite, so sqlx's own
+# sqlite driver must stay disabled (see the rusqlite pin above).
+sqlx = { version = "0.9", default-features = false, features = [
+    "postgres",
+    "runtime-tokio",
+    "migrate",
+    "macros",
+    "json",
+    "chrono",
+] }
+
+[workspace.lints.rust]
+unsafe_code = "forbid"
+
+[workspace.lints.clippy]
+all = { level = "warn", priority = -1 }

@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>$pagetitle$</title>
+<style>
+@page {
+  size: A4;
+  margin: 17mm 15mm 18mm 15mm;
+  @bottom-left { content: "$pagetitle$"; font: 7.5pt "DejaVu Sans", sans-serif; color: #7a828f; }
+  @bottom-right { content: counter(page) " / " counter(pages); font: 7.5pt "DejaVu Sans", sans-serif; color: #7a828f; }
+}
+html { font-size: 9.5pt; }
+body {
+  margin: 0;
+  font-family: "DejaVu Sans", "Liberation Sans", Arial, sans-serif;
+  line-height: 1.42;
+  color: #1b1b1b;
+  overflow-wrap: break-word;
+}
+h1 { font-size: 19pt; line-height: 1.2; margin: 0 0 8pt; padding-bottom: 5pt; border-bottom: 2pt solid #2b3a55; color: #2b3a55; }
+h2 { font-size: 13.5pt; margin: 16pt 0 6pt; padding-bottom: 2pt; border-bottom: 0.75pt solid #b8c0cc; color: #2b3a55; break-after: avoid; }
+h3 { font-size: 11pt; margin: 12pt 0 4pt; color: #2b3a55; break-after: avoid; }
+p { margin: 0 0 6pt; orphans: 3; widows: 3; }
+ul, ol { margin: 0 0 6pt; padding-left: 15pt; }
+li { margin: 0 0 2pt; }
+code { font-family: "DejaVu Sans Mono", "Liberation Mono", monospace; font-size: 0.86em; background: #f0f2f5; padding: 0 1.5pt; }
+pre { margin: 4pt 0 8pt; padding: 6pt 8pt; background: #f5f7fa; border: 0.75pt solid #d5dae1; border-radius: 3pt; font-size: 8pt; line-height: 1.35; white-space: pre-wrap; break-inside: avoid; }
+pre code { background: none; padding: 0; font-size: inherit; }
+table { width: 100%; border-collapse: collapse; margin: 6pt 0 10pt; font-size: 8.4pt; line-height: 1.32; }
+th, td { border: 0.75pt solid #c5ccd6; padding: 3pt 5pt; text-align: left; vertical-align: top; }
+th { background: #e8ecf2; }
+thead { display: table-header-group; }
+tr { break-inside: avoid; }
+a { color: #1a4f9c; text-decoration: none; }
+hr { border: 0; border-top: 0.75pt solid #ccc; margin: 10pt 0; }
+figure { margin: 8pt 0 10pt; break-inside: avoid; }
+figure img { display: block; width: 100%; height: auto; }
+figcaption { margin-top: 3pt; font-size: 8.2pt; line-height: 1.35; color: #4a5260; }
+</style>
+</head>
+<body>
+$body$
+</body>
+</html>

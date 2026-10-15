@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Cutting the cost of our AI coding assistant: progress report, 10 October 2026</title>
+<style>
+@page {
+  size: A4;
+  margin: 14mm 16mm 17mm 16mm;
+  @bottom-left { content: "Copilot workflow optimisation: progress report, 10 October 2026"; font: 7.5pt "Arimo", "DejaVu Sans", sans-serif; color: #6b7482; }
+  @bottom-right { content: "Page " counter(page) " of " counter(pages); font: 7.5pt "Arimo", "DejaVu Sans", sans-serif; color: #6b7482; }
+}
+html { font-size: 9.6pt; }
+body { margin: 0; font-family: "Arimo", "Liberation Sans", "DejaVu Sans", Arial, sans-serif; line-height: 1.4; color: #1b1b1b; }
+h1 { font-size: 21pt; line-height: 1.15; margin: 0 0 3pt; color: #2b3a55; }
+.sub { font-size: 9.5pt; color: #6b7482; margin: 0 0 9pt; padding-bottom: 6pt; border-bottom: 2pt solid #2b3a55; }
+h2 { font-size: 12.5pt; margin: 12pt 0 5pt; padding-bottom: 2pt; border-bottom: 0.75pt solid #b8c0cc; color: #2b3a55; break-after: avoid; }
+h2.first { margin-top: 0; }
+.pb { break-before: page; }
+p { margin: 0 0 5pt; orphans: 3; widows: 3; }
+ul { margin: 0 0 5pt; padding-left: 14pt; }
+li { margin: 0 0 3pt; }
+b, strong { color: #14213d; }
+code { font-family: "DejaVu Sans Mono", "Liberation Mono", monospace; font-size: 0.86em; background: #f0f2f5; padding: 0 1.5pt; }
+table { border-collapse: collapse; width: 100%; }
+
+.goal { background: #eef2f8; border-left: 3.5pt solid #2b3a55; padding: 7pt 10pt 3pt; margin: 4pt 0 9pt; font-size: 10.3pt; line-height: 1.45; }
+
+.kpi td { width: 25%; padding: 0 3.5pt; vertical-align: top; }
+.kpi td:first-child { padding-left: 0; }
+.kpi td:last-child { padding-right: 0; }
+.card { background: #f3f5f8; border-top: 2.5pt solid #2b3a55; padding: 6pt 7pt; height: 30mm; }
+.card .n { font-size: 20pt; font-weight: bold; color: #2b3a55; line-height: 1.05; }
+.card .c { font-size: 8.2pt; color: #333; margin-top: 3pt; line-height: 1.3; }
+
+.charts { margin: 6pt 0 2pt; }
+.charts > tbody > tr > td { vertical-align: top; padding: 0; }
+.charts .gap { width: 14pt; }
+.ct { font-weight: bold; color: #2b3a55; font-size: 9.2pt; margin: 0 0 4pt; }
+.note { font-size: 7.4pt; color: #6b7482; line-height: 1.3; margin-top: 3pt; }
+
+.hb td { padding: 2.4pt 0; vertical-align: middle; font-size: 8.2pt; }
+.hb .l { width: 41%; line-height: 1.2; padding-right: 5pt; }
+.hb .t { width: 47%; }
+.hb .v { width: 12%; text-align: right; font-weight: bold; color: #2b3a55; }
+.hb .b { height: 9.5pt; }
+.d1 { background: #2b3a55; } .d2 { background: #5b7194; } .d3 { background: #9db0cc; } .d4 { background: #ccd5e4; }
+
+.wk { table-layout: fixed; }
+.wk td { text-align: center; padding: 0 1pt; font-size: 6.8pt; }
+.wk .bars td { height: 38mm; vertical-align: bottom; }
+.wk .bar { margin: 1pt auto 0; width: 64%; background: #2b3a55; }
+.wk .bar.partial { background: #9db0cc; }
+.wk .val { color: #2b3a55; font-weight: bold; font-size: 6.6pt; }
+.wk .none { color: #8a929e; font-size: 6.4pt; padding-bottom: 1pt; }
+.wk .days td { border-top: 0.75pt solid #6b7482; padding-top: 1.5pt; color: #333; }
+.wk .months td { color: #6b7482; font-size: 7pt; border-top: 0.5pt solid #c5ccd6; }
+
+.bottom { border: 0.75pt solid #b8c0cc; border-top: 2.5pt solid #2b3a55; padding: 6pt 10pt 3pt; margin: 9pt 0 0; break-inside: avoid; }
+.bottom .h { font-weight: bold; color: #2b3a55; margin-bottom: 3pt; }
+
+.grid { font-size: 8.6pt; line-height: 1.33; margin: 3pt 0 6pt; }
+.grid th, .grid td { border: 0.75pt solid #c5ccd6; padding: 3.2pt 5pt; text-align: left; vertical-align: top; }
+.grid th { background: #e8ecf2; color: #2b3a55; }
+.grid tr { break-inside: avoid; }
+.st-done { color: #1f6b3a; font-weight: bold; }
+.st-obs { color: #8a5a00; font-weight: bold; }
+.st-next { color: #2b3a55; font-weight: bold; }
+.grid .pct { white-space: nowrap; }
+.small { font-size: 8pt; color: #555; }
+.src { font-size: 7.6pt; color: #6b7482; margin-top: 8pt; border-top: 0.5pt solid #c5ccd6; padding-top: 3pt; }
+</style>
+</head>
+<body>
+
+<h1>Cutting the cost of our AI coding assistant</h1>
+<div class="sub">Progress report for management &middot; status at 10 October 2026 &middot; Copilot workflow optimisation project</div>
+
+<div class="goal">
+<p><b>The goal.</b> Our developers work with an AI coding assistant (GitHub Copilot CLI). It is billed in credits called <b>AIU</b>, and our spending has become large and uneven. This project aims to <b>cut that spending by about half (we expect 30&ndash;40%) while keeping the quality of the work the same.</b></p>
+<p>We do it in three steps: measure exactly where the credits go, remove the waste one lever at a time, and check every week, with numbers, that quality has not dropped.</p>
+</div>
+
+<table class="kpi"><tr>
+<td><div class="card"><div class="n">&asymp;140k</div><div class="c"><b>AIU spent</b> in 203 sessions since cost records began on 24 July (a lower bound, see the chart note)</div></div></td>
+<td><div class="card"><div class="n">80%</div><div class="c">of that spend is the cost of <b>carrying the conversation along</b>: re-reading and re-storing it at every step</div></div></td>
+<td><div class="card"><div class="n">71%</div><div class="c">comes from only <b>31 long sessions</b>, which is 15% of all sessions with cost records</div></div></td>
+<td><div class="card"><div class="n">110 h</div><div class="c">total time the assistant <b>waited for an approval click</b> over 7,436 requests, including time users were away</div></div></td>
+</tr></table>
+
+<h2>Why it costs so much, in plain words</h2>
+<p>Before every step, the assistant re-reads the whole conversation so far: on average about 180,000 tokens (&asymp;135,000 words, longer than a typical novel). One re-read is cheap, but a single task takes dozens of steps, so carrying the conversation along adds up to 80% of the bill. Two things make it worse:</p>
+<ul>
+<li><b>Pauses.</b> The assistant's short-term memory (the cache) expires after 5 minutes without activity. After a pause the whole history is paid for again, at about 12 times the price. These &ldquo;cold restarts&rdquo; are 19% of all spend: resuming a stale session costs &asymp;64 AIU for its first step, a fresh session only &asymp;11.</li>
+<li><b>Autopilot.</b> In autopilot mode the assistant works alone for many steps in a row. The 91 autopilot sessions are 73% of the spend, and each costs 3.3 times more than a hands-on session.</li>
+</ul>
+
+<table class="charts"><tr>
+<td style="width: 45%;">
+<div class="ct">Where the credits go (share of AIU)</div>
+<table class="hb">
+<tr><td class="l">Re-reading the conversation <span class="small">(cache read)</span></td><td class="t"><div class="b d1" style="width: 51%;"></div></td><td class="v">51%</td></tr>
+<tr><td class="l">Storing the conversation <span class="small">(cache write)</span></td><td class="t"><div class="b d2" style="width: 29%;"></div></td><td class="v">29%</td></tr>
+<tr><td class="l">Writing answers <span class="small">(output)</span></td><td class="t"><div class="b d3" style="width: 18%;"></div></td><td class="v">18%</td></tr>
+<tr><td class="l">New text sent in <span class="small">(input)</span></td><td class="t"><div class="b d4" style="width: 2%;"></div></td><td class="v">2%</td></tr>
+</table>
+<div class="note">The first two bars together are the 80%: the cost of carrying the conversation along.</div>
+</td>
+<td class="gap"></td>
+<td>
+<div class="ct">Weekly spend, in thousands of AIU</div>
+<table class="wk">
+<tr class="bars">
+<td><div class="val">10.1k</div><div class="bar" style="height: 7.4mm;"></div></td>
+<td><div class="val">7.6k</div><div class="bar" style="height: 5.5mm;"></div></td>
+<td><div class="none">none</div></td>
+<td><div class="none">none</div></td>
+<td><div class="none">none</div></td>
+<td><div class="val">0.6k</div><div class="bar" style="height: 0.4mm;"></div></td>
+<td><div class="val">18.3k</div><div class="bar" style="height: 13.4mm;"></div></td>
+<td><div class="val">18.5k</div><div class="bar" style="height: 13.5mm;"></div></td>
+<td><div class="val">13.0k</div><div class="bar" style="height: 9.5mm;"></div></td>
+<td><div class="val">2.4k</div><div class="bar" style="height: 1.7mm;"></div></td>
+<td><div class="val">43.8k</div><div class="bar" style="height: 32mm;"></div></td>
+<td><div class="val">&asymp;25k*</div><div class="bar partial" style="height: 18.6mm;"></div></td>
+</tr>
+<tr class="days"><td>20</td><td>27</td><td>3</td><td>10</td><td>17</td><td>24</td><td>31</td><td>7</td><td>14</td><td>21</td><td>28</td><td>5</td></tr>
+<tr class="months"><td colspan="2">Jul</td><td colspan="5">Aug</td><td colspan="4">Sep</td><td colspan="1">Oct</td></tr>
+</table>
+<div class="note">Weeks start on Monday. No sessions were recorded 3&ndash;23 Aug. Cost records are incomplete for the weeks of 20 Jul, 27 Jul and 24 Aug (many sessions have none), so those bars understate the spend; from 31 Aug they are essentially complete. *Partial week (5&ndash;10 Oct); the normal-size conversation window applies from 9 Oct.</div>
+</td>
+</tr></table>
+
+<div class="bottom">
+<div class="h">Bottom line</div>
+<ul>
+<li><b>Done:</b> we can now see in detail where the credits go, and the biggest single lever, a normal-size conversation window, has been in force since 9 October (all 14 new sessions since then use it).</li>
+<li><b>Not yet proven:</b> the saving itself. The first before/after comparison is possible around 16 October, after one week of data.</li>
+<li><b>Needed from management:</b> nothing at this stage. This report is for information.</li>
+</ul>
+</div>
+
+<h2 class="pb first">What we are doing about it</h2>
+<p>Each lever removes a different kind of waste. The percentages are upper-bound estimates taken from the project plan; they overlap, so they do not add up. Together we expect <b>30&ndash;40%</b>, with 50% as the target.</p>
+<table class="grid">
+<tr><th style="width: 22%;">Lever</th><th>In plain words</th><th style="width: 11%;">Est. saving</th><th style="width: 14%;">Status</th></tr>
+<tr><td><b>Normal-size conversation window by default</b></td><td>New sessions use the standard window (old history is summarised at about 160k tokens) instead of the very large one (about 750k). The large one stays one command away for the rare cases that need it.</td><td class="pct">15&ndash;20%</td><td><span class="st-done">Done</span> 9 Oct</td></tr>
+<tr><td><b>Short fresh sessions with an automatic hand-over note</b></td><td>Instead of resuming a huge, stale session, start a new one that opens with a short summary (at most 1,500 tokens) of where things stand.</td><td class="pct">up to 8&ndash;10%</td><td><span class="st-next">Next to build</span></td></tr>
+<tr><td><b>Cheaper model for helper agents</b></td><td>The helpers that search and explore (10% of spend) use a cheaper model. The main assistant is unchanged.</td><td class="pct">3&ndash;4%</td><td><span class="st-next">From &asymp;16 Oct</span></td></tr>
+<tr><td><b>Better working habits</b></td><td>Standing instructions: combine steps, check on slow jobs less often, hand noisy build loops to a helper.</td><td class="pct">5&ndash;8%</td><td><span class="st-next">From &asymp;16 Oct</span></td></tr>
+<tr><td><b>Search past work instead of re-reading it</b></td><td>Look up old decisions and code on demand, so that conversations can stay short.</td><td class="pct">1&ndash;3%</td><td><span class="st-next">Planned</span>, only if a test supports it</td></tr>
+<tr><td><b>Auto-approve safe read-only commands</b></td><td>Skip the &ldquo;may I?&rdquo; question for harmless commands such as <code>ls</code> or <code>git status</code> inside trusted folders.</td><td class="pct">&asymp;0% <span class="small">(measured)</span></td><td><span class="st-obs">Observing only</span></td></tr>
+</table>
+
+<h2>What exists today</h2>
+<ul>
+<li><b>A private logbook of every assistant session</b> (a database on the workstation only): 393 sessions (203 of them with cost records), about 1,750 conversation turns, 35,900 tool calls, 20,600 model calls and 223,000 logged events, kept current by a background service. Secrets are masked before anything is stored.</li>
+<li><b>A weekly report:</b> spend by model and session type, waiting time, quality indicators.</li>
+<li><b>A permission assistant in observation mode</b> since 10 October. It records what it <i>would</i> approve and approves nothing. Each decision takes about 10&ndash;14 ms (the limit is 50 ms).</li>
+<li><b>Settings changes</b> made on 9 October: normal-size window by default, a one-word switch to the large window, and a per-session spending cap.</li>
+<li><b>Tested:</b> 319 automated tests pass; a 19-page plan records decisions, risks and estimates.</li>
+</ul>
+
+<h2>What we learned so far</h2>
+<ul>
+<li><b>The measurements can be trusted.</b> At its first run the logbook reproduced the earlier hand-made baseline almost exactly (129,366 AIU against &asymp;129.4k; the total has grown since). Row counts match their sources, re-running adds no duplicates, and none of the 2.25 million text fields checked contained a secret after masking.</li>
+<li><b>One lever turned out smaller than hoped (a correction).</b> We expected the permission assistant to save 2&ndash;4% by removing long waits. Replayed on 4,536 real past command-approval requests, it would have answered 9% of them, and none of the 43 that people refused or cancelled. But those were already the quick ones: together they account for 0.1% of the waiting time and for none of the 118 waits of 5 minutes or more. We therefore do not count on it; the saving has to come from the other levers.</li>
+<li><b>Spend is lumpy.</b> A handful of long sessions decide the bill (page 1), so the levers aim at shortening those, not at everyday use.</li>
+</ul>
+
+<h2>Quality safeguard</h2>
+<p>A saving only counts if quality holds. The logbook tracks automatic indicators; today's baseline is <b>3.0 mid-task stops by a user per 100 messages</b>, <b>1.3 errors or retries per 100 assistant turns</b> and <b>276</b> tasks marked complete. Any lever that makes an indicator more than 25% worse is rolled back.</p>
+
+<h2 class="pb first">Cost and expected benefit</h2>
+<p>Building and testing this system used &asymp;6.6k AIU in the project's own sessions, about 5% of all recorded spend (the assistant helped to build it). Take the average of &asymp;12.4k AIU per week, a cautious figure because it includes the three empty August weeks and the weeks with incomplete cost records (the five full weeks since 31 Aug averaged &asymp;19k). A 30&ndash;40% saving is then &asymp;3.7&ndash;5.0k AIU per week, so the build would be repaid in under two weeks once the levers are active. <b>This is a projection: no saving has been measured yet.</b></p>
+
+<h2>Risks and open points</h2>
+<ul>
+<li><b>Projections, not results.</b> The estimates overlap; the weekly report will show what really happens.</li>
+<li><b>Shorter sessions could lose context.</b> Mitigation: automatic hand-over notes and searchable history; the large window stays available on request.</li>
+<li><b>Permission assistant.</b> It can only ever say &ldquo;approved&rdquo;, and only for a short list of read-only commands inside trusted folders. It never blocks or runs anything, and any error falls back to the normal question. It would be switched on only after a 3-day log review and an explicit human decision, and one setting turns it off again.</li>
+<li><b>Data stays local.</b> The logbook and every project tool run on the workstation only; the database accepts connections from this machine alone, nothing is sent to an outside service, and secrets are masked before storage.</li>
+<li><b>Open point:</b> the per-session spending cap (1,000 AIU) is missing in about half of the new sessions (6 of 11 real sessions since 9 Oct, test runs excluded). The cause is not yet known.</li>
+</ul>
+
+<h2>Next steps</h2>
+<table class="grid">
+<tr><th style="width: 20%;">When</th><th>What</th></tr>
+<tr><td><b>13 Oct (earliest)</b></td><td>Review the 3-day observation log of the permission assistant and decide whether to switch it on. This is optional, because the payoff is small.</td></tr>
+<tr><td><b>&asymp;16 Oct</b></td><td>One week of data on the new defaults: first before/after comparison. Start the cheaper helper models and the working habits.</td></tr>
+<tr><td><b>After that</b></td><td>Hand-over notes for short fresh sessions, then history search. Each step is checked against the quality indicators.</td></tr>
+<tr><td><b>Every week</b></td><td>Review the weekly report and decide on further levers.</td></tr>
+</table>
+<p><b>Decision needed from management: none for now.</b> Feedback on the 50% target or on the quality indicators is welcome.</p>
+
+<h2>Glossary</h2>
+<table class="grid">
+<tr><td style="width: 20%;"><b>AIU</b></td><td>The credit unit in which GitHub bills Copilot usage.</td></tr>
+<tr><td><b>Token</b></td><td>A piece of text; about three quarters of a word.</td></tr>
+<tr><td><b>Conversation window (context)</b></td><td>The history the assistant re-reads before every step.</td></tr>
+<tr><td><b>Cache</b></td><td>Short-term memory that makes re-reading cheap. It expires after 5 minutes of inactivity.</td></tr>
+<tr><td><b>Autopilot</b></td><td>The assistant works through a task on its own, for many steps in a row.</td></tr>
+<tr><td><b>Helper agent</b></td><td>A second assistant that the main one hands a side task, such as searching the code.</td></tr>
+<tr><td><b>Approval request</b></td><td>The assistant asking &ldquo;may I run this command?&rdquo; before it acts.</td></tr>
+</table>
+
+<div class="src">Sources: project database <code>copilot_ctx</code> (10 Oct 2026, about 11:30), the project plan (<code>PLAN.md</code>, &sect;2, &sect;6.12, &sect;6.13, &sect;10) and a replay of 4,536 historical approval requests. Figures are rounded and keep growing as sessions continue; spend totals count only sessions that have cost records, so they are lower bounds.</div>
+
+</body>
+</html>
